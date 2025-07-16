@@ -1,15 +1,18 @@
 package com.example.AuthService.Service;
 
+import com.example.AuthService.DTO.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Responsible for JWT creating and obtaining data from JWT.
@@ -45,12 +48,15 @@ public class JwtService {
     /**
      * Creates new token based on passed data and secret key.
      *
-     * @param userDetails data that will be encoded into token
+     * @param user data that will be encoded into token
      * @return token
      */
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(User user) {
+        Map<String, List<String>> claims = new HashMap<>();
+        claims.put("roles", user.getRolesOnly());
         return Jwts.builder()
-                .setSubject(userDetails.getUsername())
+                .setClaims(claims)
+                .setSubject(user.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getKey(), SignatureAlgorithm.HS256)
