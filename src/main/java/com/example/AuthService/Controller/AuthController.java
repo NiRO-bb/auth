@@ -4,6 +4,10 @@ import com.example.AuthService.DTO.Token;
 import com.example.AuthService.DTO.User;
 import com.example.AuthService.Exception.DataNotFoundException;
 import com.example.AuthService.Service.AuthService;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +42,14 @@ public class AuthController {
      * @param user user instance that must be added
      * @return added user instance and http OK status
      */
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User was added",
+                    content = @Content(schema = @Schema(implementation = User.class))),
+            @ApiResponse(responseCode = "404", description = "User was not added - passed user data is incorrect",
+                    content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "500", description = "User adding was failed",
+                    content = @Content(schema = @Schema(implementation = String.class)))
+    })
     @PutMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody User user) {
         try {
@@ -63,6 +75,14 @@ public class AuthController {
      * @param user user instance that must be found
      * @return JWT that store info about authorized user and http status OK
      */
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User logged in",
+                    content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "404", description = "User not logged in - invalid data",
+                    content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "500", description = "User adding was failed",
+                    content = @Content(schema = @Schema(implementation = String.class)))
+    })
     @PostMapping("/signin")
     public ResponseEntity<?> signIn(@RequestBody User user) {
         try {

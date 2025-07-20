@@ -4,6 +4,11 @@ import com.example.AuthService.DTO.RoleToSave;
 import com.example.AuthService.DTO.User;
 import com.example.AuthService.Exception.DataNotFoundException;
 import com.example.AuthService.Service.RoleService;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +47,14 @@ public class RoleController {
      * @param roles contains user login and array of strings - new roles
      * @return updated user instance and http OK status
      */
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User role list updated",
+                    content = @Content(schema = @Schema(implementation = User.class))),
+            @ApiResponse(responseCode = "404", description = "User role list not updated - invalid data",
+                    content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "500", description = "Roles saving was failed",
+                    content = @Content(schema = @Schema(implementation = String.class)))
+    })
     @PutMapping("/save")
     public ResponseEntity<?> save(@RequestBody RoleToSave roles) {
         try {
@@ -68,6 +81,14 @@ public class RoleController {
      * @param user who send request - received automatically from JWT
      * @return user role list and http status OK
      */
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User role list received",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = String.class)))),
+            @ApiResponse(responseCode = "404", description = "User role list not received - permission denied",
+                    content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "500", description = "User role list receiving was failed",
+                    content = @Content(schema = @Schema(implementation = String.class)))
+    })
     @GetMapping("/{login}")
     public ResponseEntity<?> getRoles(@PathVariable("login") String login,
                                       @AuthenticationPrincipal User user) throws AccessDeniedException {
