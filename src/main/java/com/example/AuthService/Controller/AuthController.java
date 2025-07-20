@@ -46,9 +46,9 @@ public class AuthController {
             @ApiResponse(responseCode = "200", description = "User was added",
                     content = @Content(schema = @Schema(implementation = User.class))),
             @ApiResponse(responseCode = "404", description = "User was not added - passed user data is incorrect",
-                    content = @Content(schema = @Schema(implementation = String.class))),
+                    content = @Content(schema = @Schema(type = "string", example = "error message"))),
             @ApiResponse(responseCode = "500", description = "User adding was failed",
-                    content = @Content(schema = @Schema(implementation = String.class)))
+                    content = @Content(schema = @Schema(type = "string", example = "error message")))
     })
     @PutMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody User user) {
@@ -77,11 +77,11 @@ public class AuthController {
      */
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User logged in",
-                    content = @Content(schema = @Schema(implementation = String.class))),
+                    content = @Content(schema = @Schema(type = "string", example = "some JWT"))),
             @ApiResponse(responseCode = "404", description = "User not logged in - invalid data",
-                    content = @Content(schema = @Schema(implementation = String.class))),
+                    content = @Content(schema = @Schema(type = "string", example = "error message"))),
             @ApiResponse(responseCode = "500", description = "User adding was failed",
-                    content = @Content(schema = @Schema(implementation = String.class)))
+                    content = @Content(schema = @Schema(type = "string", example = "error message")))
     })
     @PostMapping("/signin")
     public ResponseEntity<?> signIn(@RequestBody User user) {

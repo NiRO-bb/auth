@@ -4,8 +4,10 @@ import com.example.AuthService.DTO.RoleToSave;
 import com.example.AuthService.DTO.User;
 import com.example.AuthService.Exception.DataNotFoundException;
 import com.example.AuthService.Service.RoleService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -47,13 +49,14 @@ public class RoleController {
      * @param roles contains user login and array of strings - new roles
      * @return updated user instance and http OK status
      */
+    @Operation(summary = "Update user role list", description = "Removes all user roles, then adds all passed roles")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User role list updated",
                     content = @Content(schema = @Schema(implementation = User.class))),
             @ApiResponse(responseCode = "404", description = "User role list not updated - invalid data",
-                    content = @Content(schema = @Schema(implementation = String.class))),
+                    content = @Content(schema = @Schema(type = "string", example = "error message"))),
             @ApiResponse(responseCode = "500", description = "Roles saving was failed",
-                    content = @Content(schema = @Schema(implementation = String.class)))
+                    content = @Content(schema = @Schema(type = "string", example = "error message")))
     })
     @PutMapping("/save")
     public ResponseEntity<?> save(@RequestBody RoleToSave roles) {
@@ -81,13 +84,15 @@ public class RoleController {
      * @param user who send request - received automatically from JWT
      * @return user role list and http status OK
      */
+    @Operation(summary = "Retrieve user roles", description = "Returns user role list if access level is enough")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User role list received",
-                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = String.class)))),
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = String.class)),
+                            examples = @ExampleObject(value = "[\"USER\", \"ADMIN\"]"))),
             @ApiResponse(responseCode = "404", description = "User role list not received - permission denied",
-                    content = @Content(schema = @Schema(implementation = String.class))),
+                    content = @Content(schema = @Schema(type = "string", example = "error message"))),
             @ApiResponse(responseCode = "500", description = "User role list receiving was failed",
-                    content = @Content(schema = @Schema(implementation = String.class)))
+                    content = @Content(schema = @Schema(type = "string", example = "error message")))
     })
     @GetMapping("/{login}")
     public ResponseEntity<?> getRoles(@PathVariable("login") String login,
