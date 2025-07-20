@@ -3,6 +3,7 @@ package com.example.AuthService.DTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -46,6 +47,7 @@ public class User implements UserDetails, Serializable {
     @JsonIgnore
     private List<UserRole> roles = new ArrayList<>();
 
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     @JsonProperty("roles")
     public List<String> getRolesOnly() {
         return roles.stream()
