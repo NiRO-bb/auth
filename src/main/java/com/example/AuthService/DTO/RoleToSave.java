@@ -1,5 +1,6 @@
 package com.example.AuthService.DTO;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class RoleToSave {
 
+    @Schema(example = "cool_user123")
     private String login;
+    @Schema(example = "[\"USER\", \"ADMIN\"]")
     private String[] roles;
 
     public String desc() {

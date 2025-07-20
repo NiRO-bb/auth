@@ -36,10 +36,15 @@ import java.util.stream.Collectors;
 public class User implements UserDetails, Serializable {
 
     @Id
+    @Schema(example = "cool_user123")
     private String login;
 
+    @Schema(example = "SuperSecretPassword",
+            description = "Returned in hashed form when responding")
     private String password;
 
+    @Schema(example = "pochta@mail.com",
+            description = "Not necessary when logging")
     private String email;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
@@ -47,7 +52,8 @@ public class User implements UserDetails, Serializable {
     @JsonIgnore
     private List<UserRole> roles = new ArrayList<>();
 
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    @Schema(example = "[\"USER\", \"ADMIN\"]",
+            accessMode = Schema.AccessMode.READ_ONLY)
     @JsonProperty("roles")
     public List<String> getRolesOnly() {
         return roles.stream()
