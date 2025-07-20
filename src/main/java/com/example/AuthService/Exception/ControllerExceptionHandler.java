@@ -11,7 +11,7 @@ import java.nio.file.AccessDeniedException;
 /**
  * Handles some exceptions from controller classes.
  */
-@RestControllerAdvice("com.example.AuthService.Controller")
+@RestControllerAdvice
 public class ControllerExceptionHandler {
 
     /**
