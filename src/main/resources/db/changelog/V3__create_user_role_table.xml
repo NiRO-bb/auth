@@ -1,0 +1,18 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="20250712-3" author="niro_bb">
+        <sql>
+            create table user_role (
+            user_login text references service_user(login) not null,
+            role_id text references role (id) not null,
+            primary key (user_login, role_id),
+            foreign key (user_login) references service_user(login)
+                on delete cascade
+                on update cascade,
+            foreign key (role_id) references role (id)
+                on delete cascade
+                on update cascade
+            );
+        </sql>
+    </changeSet>
+</databaseChangeLog>
