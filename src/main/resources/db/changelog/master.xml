@@ -7,5 +7,7 @@
     <include file="db/changelog/V2__create_service_user_table.xml" relativeToChangelogFile="false"/>
     <include file="db/changelog/V3__create_user_role_table.xml" relativeToChangelogFile="false"/>
     <include file="db/changelog/V4__add_role_data.xml" relativeToChangelogFile="false"/>
+    <include file="db/changelog/V5__update_service_user_table.xml" relativeToChangelogFile="false"/>
+    <include file="db/changelog/V6__create_user_info_table.xml" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>
