@@ -15,6 +15,17 @@ import java.nio.file.AccessDeniedException;
 public class ControllerExceptionHandler {
 
     /**
+     * Catches GoogleRegistrationMissingException and handles them.
+     *
+     * @param exception catched exception
+     * @return ResponseEntity with error message and http status NOT_FOUND
+     */
+    @ExceptionHandler(GoogleRegistrationMissingException.class)
+    public ResponseEntity<?> handleGoogleRegistrationMissingException(GoogleRegistrationMissingException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    /**
      * Catches BadCredentialsExceptions and handles them.
      *
      * @param exception catched exception
