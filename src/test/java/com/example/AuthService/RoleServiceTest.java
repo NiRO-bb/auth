@@ -9,9 +9,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+
+import java.nio.file.AccessDeniedException;
+import java.util.List;
 
 @SpringBootTest
 @ExtendWith(DatabaseSetup.class)
@@ -19,6 +24,9 @@ public class RoleServiceTest {
 
     @Autowired
     private RoleService service;
+
+    @MockitoBean
+    private User mockUser;
 
     @BeforeAll
     public static void setup(@Autowired UserRepository repository,
@@ -41,6 +49,22 @@ public class RoleServiceTest {
     public void testSaveNotFound() {
         Assertions.assertThrows(DataNotFoundException.class,
                 () -> service.save(new RoleToSave("invalid", new String[0])));
+    }
+
+    @Test
+    public void testGetRolesSuccess() throws AccessDeniedException {
+        Mockito.when(mockUser.getRolesOnly()).thenReturn(List.of("ADMIN"));
+        Mockito.when(mockUser.getLogin()).thenReturn("testRole2");
+        List<String> list = service.getRoles("testRole2", mockUser);
+
+        Assertions.assertTrue(list.isEmpty());
+    }
+
+    @Test
+    public void testGetRolesFailure() throws AccessDeniedException {
+        Mockito.when(mockUser.getRolesOnly()).thenReturn(List.of("USER"));
+        Mockito.when(mockUser.getLogin()).thenReturn("testRole3");
+        Assertions.assertThrows(AccessDeniedException.class, () -> service.getRoles("testRole2", mockUser));
     }
 
 }
