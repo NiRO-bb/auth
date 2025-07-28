@@ -16,8 +16,11 @@ git clone https://github.com/NiRO-bb/auth.git
 ```
 
 2. Build with Maven
+You must replace the following:
+* `<client_id>` with client id value from google cloud
+* `<client_secret>` with client secret value from google cloud
 ```shell
-mvn clean package 
+mvn clean package  "-Dspring.security.oauth2.client.registration.google.client-id=<client_id>" "-Dspring.security.oauth2.client.registration.google.client-secret=<client_secret>"
 ```
 
 ## Usage
@@ -31,13 +34,17 @@ You <b>must</b> replace the following:
 * `<password>` with password of specified user
 * `<secret>` with secret - cryptographic key used for signing and verifying the token's integrity (<i>example: 1af312f5365fdb661334102f81c41582c04cb64048a9bf2fe802b1a04ea4bbc7</i>)
 * `<expirations>` with time value (in milliseconds) - JWT expiration
+* `<client_id>` with client id value from google cloud
+* `<client_secret>` with client secret value from google cloud
 ```shell
 java -jar target/<jar_name>.jar \
  --spring.datasource.url=jdbc:postgresql://localhost:<port>/<database> \
   --spring.datasource.username=<username> \
    --spring.datasource.password=<password> \
    --token.secret.key=<secret> \
-   --token.expirations=<expirations>
+   --token.expirations=<expirations> \
+   --spring.security.oauth2.client.registration.google.client-id=<client_id> \
+   --spring.security.oauth2.client.registration.google.client-secret=<client_secret> 
 ```
 
 ## Contributing
