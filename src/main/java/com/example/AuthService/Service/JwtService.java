@@ -5,6 +5,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -17,14 +19,16 @@ import java.util.Map;
 /**
  * Responsible for JWT creating and obtaining data from JWT.
  */
+@Getter
+@Setter
 @Service
 public class JwtService {
 
     @Value("${token.secret.key}")
-    String secret;
+    private String secret;
 
     @Value("${token.expirations}")
-    Long expiration;
+    private Long expiration;
 
     public String getUsername(String token) {
         return Jwts.parser()
