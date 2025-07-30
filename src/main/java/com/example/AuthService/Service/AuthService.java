@@ -113,12 +113,13 @@ public class AuthService {
      * @return generated JWT with added user info
      */
     private TokenWithUser signUpOauth(User user, final String login, int postfix) {
+        String password = user.getPassword();
         try {
             user.setLogin(util.updateLogin(login, postfix));
             User addedUser = signUp(user);
             return new TokenWithUser(jwtService.generateToken(addedUser),
                     new TokenWithUser.OauthUser(util.updateLogin(addedUser.getLogin(), postfix),
-                            user.getPassword()));
+                            password));
         } catch (DataNotFoundException exception) {
             return signUpOauth(user, login, postfix++);
         }
