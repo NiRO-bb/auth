@@ -1,8 +1,8 @@
 package com.example.AuthService.Service;
 
 import com.example.AuthService.DTO.User;
-import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ public class JwtService {
     private Long expiration;
 
     public String getUsername(String token) {
-        return Jwts.parser()
+        return Jwts.parserBuilder()
                 .setSigningKey(getKey())
                 .build()
                 .parseClaimsJws(token)
@@ -68,7 +69,7 @@ public class JwtService {
     }
 
     private Date getExpiration(String token) {
-        return Jwts.parser()
+        return Jwts.parserBuilder()
                 .setSigningKey(getKey())
                 .build()
                 .parseClaimsJws(token)

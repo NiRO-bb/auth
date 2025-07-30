@@ -54,7 +54,6 @@ public class AuthService {
         boolean isExist = userRepo.existsByLoginOrEmail(user.getLogin(), user.getEmail());
         if (!isExist) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            System.out.println(user.getLogin());
             userRepo.save(user);
             Role role = roleRepo.findById("USER").get();
             UserRole ur = urRepo.save(new UserRole(new UserRole.Key(user.getLogin(), "USER"), user, role));
