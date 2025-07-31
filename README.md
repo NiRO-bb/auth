@@ -37,6 +37,12 @@ mvn clean package
 ```shell
 docker compose up
 ```
+<p>or</p>
+
+2. Launch JAR
+```shell
+java -jar target/AuthService-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev
+```
 
 ## Contributing
 <a href="https://github.com/NiRO-bb/auth/graphs/contributors/">Contributors</a>
