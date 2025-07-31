@@ -23,8 +23,8 @@ public class DatabaseSetup implements BeforeAllCallback {
         System.setProperty("spring.datasource.password", container.getPassword());
         System.setProperty("token.secret.key", "1af312f5365fdb661334102f81c41582c04cb64048a9bf2fe802b1a04ea4bbc7");
         System.setProperty("token.expirations", "600000");
-        System.setProperty("spring.security.oauth2.client.registration.google.client-id", "${GOOGLE_CLIENT_ID}");
-        System.setProperty("spring.security.oauth2.client.registration.google.client-secret", "${GOOGLE_CLIENT_SECRET}");
+        System.setProperty("spring.security.oauth2.client.registration.google.client-id", "default");
+        System.setProperty("spring.security.oauth2.client.registration.google.client-secret", "default");
     }
 
 }
