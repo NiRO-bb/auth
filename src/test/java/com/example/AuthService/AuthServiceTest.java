@@ -1,17 +1,24 @@
 package com.example.AuthService;
 
+import com.example.AuthService.DTO.TokenWithUser;
 import com.example.AuthService.DTO.User;
 import com.example.AuthService.Exception.DataNotFoundException;
+import com.example.AuthService.Exception.GoogleRegistrationMissingException;
 import com.example.AuthService.Repository.UserRepository;
 import com.example.AuthService.Service.AuthService;
+import com.example.AuthService.Utils.AuthUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+
+import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
 @ExtendWith(DatabaseSetup.class)
@@ -20,14 +27,26 @@ public class AuthServiceTest {
     @Autowired
     private AuthService service;
 
+    @MockitoBean
+    private AuthUtil util;
+
     @BeforeAll
     public static void setup(@Autowired UserRepository repository,
                              @Autowired PasswordEncoder passwordEncoder) {
+
         User user = new User();
         user.setLogin("test");
         user.setEmail("test");
         user.setPassword(passwordEncoder.encode("test"));
+        user.setGoogleReg(true);
         repository.save(user);
+
+        User user2 = new User();
+        user2.setLogin("test2");
+        user2.setEmail("test2");
+        user2.setPassword(passwordEncoder.encode("test2"));
+        user2.setGoogleReg(false);
+        repository.save(user2);
     }
 
     @Test
@@ -58,11 +77,34 @@ public class AuthServiceTest {
     }
 
     @Test
-    public void testSignBadCredentials() {
+    public void testSignInBadCredentials() {
         User user = new User();
-        user.setLogin("test2");
-        user.setPassword("test2");
+        user.setLogin("testFail");
+        user.setPassword("testFail");
         Assertions.assertThrows(BadCredentialsException.class, () -> service.signIn(user));
+    }
+
+    @Test
+    public void testSignInOauthSuccess1() {
+        Mockito.when(util.getEmail()).thenReturn("test");
+        Assertions.assertDoesNotThrow(() -> service.signInOauth());
+    }
+
+    @Test
+    public void testSignInOauthSuccess2() {
+        Mockito.when(util.getEmail()).thenReturn("test3@test.com");
+        Mockito.when(util.generatePassword(any(Integer.class))).thenReturn("test3");
+        Mockito.when(util.getGivenName()).thenReturn("test3");
+        Mockito.when(util.getFamilyName()).thenReturn("test3");
+        Mockito.when(util.updateLogin("test3", 0)).thenReturn("test3");
+        TokenWithUser result = (TokenWithUser) service.signInOauth();
+        Assertions.assertEquals("test3", result.getUser().getLogin());
+    }
+
+    @Test
+    public void testSignInOauthGoogleRegistrationMissing() {
+        Mockito.when(util.getEmail()).thenReturn("test2");
+        Assertions.assertThrows(GoogleRegistrationMissingException.class, () -> service.signInOauth());
     }
 
 }

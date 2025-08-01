@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -40,8 +41,8 @@ public class RoleControllerTest {
 
     @Test
     public void testSaveFailure() {
-        Mockito.when(service.save(any(RoleToSave.class))).thenThrow(new RuntimeException("error"));
-        Assertions.assertThrows(RuntimeException.class, () -> controller.save(new RoleToSave()));
+        Mockito.when(service.save(any(RoleToSave.class))).thenThrow(new DataAccessException("error") {});
+        Assertions.assertThrows(DataAccessException.class, () -> controller.save(new RoleToSave()));
     }
 
     @Test
@@ -59,8 +60,8 @@ public class RoleControllerTest {
 
     @Test
     public void testGetRolesFailure() throws AccessDeniedException {
-        Mockito.when(service.getRoles(any(String.class), any(User.class))).thenThrow(new RuntimeException("error"));
-        Assertions.assertThrows(RuntimeException.class, () -> controller.getRoles("login", new User()));
+        Mockito.when(service.getRoles(any(String.class), any(User.class))).thenThrow(new DataAccessException("error") {});
+        Assertions.assertThrows(DataAccessException.class, () -> controller.getRoles("login", new User()));
     }
 
 }

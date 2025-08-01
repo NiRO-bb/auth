@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -67,9 +68,9 @@ public class RoleController {
         } catch (DataNotFoundException exception) {
             LOGGER.warn("User role list not updated {}; {}}", roles.desc(), exception.getMessage());
             throw new DataNotFoundException(exception.getMessage());
-        } catch (Exception exception) {
+        } catch (DataAccessException exception) {
             LOGGER.error("Roles saving was failed; Error occurred {}", exception.getMessage());
-            throw new RuntimeException("Roles saving was failed.");
+            throw new DataAccessException("Roles saving was failed. Error occurred while accessing data.") {};
         }
     }
 
@@ -105,9 +106,9 @@ public class RoleController {
             LOGGER.warn("User role list not obtained {}; Error occurred {}",
                     String.format("{ \"login\":\"%s\" }", login), exception.getMessage());
             throw new AccessDeniedException(exception.getMessage());
-        } catch (Exception exception) {
+        } catch (DataAccessException exception) {
             LOGGER.error("User role list obtaining was failed; Error occurred {}", exception.getMessage());
-            throw new RuntimeException("User role list obtaining was failed.");
+            throw new DataAccessException("User role list obtaining was failed. Error occurred while accessing data.") {};
         }
     }
 

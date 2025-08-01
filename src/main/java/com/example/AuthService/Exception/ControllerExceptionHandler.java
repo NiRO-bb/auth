@@ -1,5 +1,6 @@
 package com.example.AuthService.Exception;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -13,6 +14,17 @@ import java.nio.file.AccessDeniedException;
  */
 @RestControllerAdvice
 public class ControllerExceptionHandler {
+
+    /**
+     * Catches GoogleRegistrationMissingException and handles them.
+     *
+     * @param exception catched exception
+     * @return ResponseEntity with error message and http status NOT_FOUND
+     */
+    @ExceptionHandler(GoogleRegistrationMissingException.class)
+    public ResponseEntity<?> handleGoogleRegistrationMissingException(GoogleRegistrationMissingException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
 
     /**
      * Catches BadCredentialsExceptions and handles them.
@@ -48,13 +60,13 @@ public class ControllerExceptionHandler {
     }
 
     /**
-     * Catches RuntimeExceptions and handles them.
+     * Catches DataAccessExceptions and handles them.
      *
      * @param exception catched exception
      * @return ResponseEntity with error message and http status INTERNAL_SERVER_ERROR
      */
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<?> handleRuntimeException(RuntimeException exception) {
+    @ExceptionHandler(DataAccessException.class)
+    public ResponseEntity<?> handleDataAccessException(DataAccessException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -46,6 +47,11 @@ public class User implements UserDetails, Serializable {
     @Schema(example = "pochta@mail.com",
             description = "Not necessary when logging")
     private String email;
+
+    @Column(name = "has_google_reg")
+    @Schema(name = "has_google_reg")
+    @JsonIgnore
+    private boolean isGoogleReg = false;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     @JsonManagedReference("userReference")

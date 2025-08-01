@@ -1,8 +1,8 @@
 package com.example.AuthService.Config;
 
-import com.example.AuthService.Password.CustomPasswordEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
@@ -18,7 +18,7 @@ public class PasswordConfig {
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new CustomPasswordEncoder();
+        return new BCryptPasswordEncoder();
     }
 
 }
